@@ -4,79 +4,89 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArticleOps {
-    private final List<Article> articles;
+	private final List<Article> articles;
 
-    public ArticleOps(List<Article> articles) {
-        this.articles = articles;
-    }
+	public ArticleOps(List<Article> articles) {
+		this.articles = articles;
+	}
 
-    public Article getFirstJavaArticle_loop() {
-        for (Article article : articles) {
-            if (article.getTags().contains("Java")) {
-                return article;
-            }
-        }
-        return null;
-    }
+	public Article getFirstJavaArticle_loop() {
+		for (Article article : articles) {
+			if (article.getTags().contains("Java")) {
+				return article;
+			}
+		}
+		return null;
+	}
 
-    public Optional<Article> getFirstJavaArticle_stream() {
-        return articles.stream()
-                .filter(article -> article.getTags().contains("Java"))
-                .findFirst();
-    }
+	public Optional<Article> getFirstJavaArticle_stream() {
+		return articles.stream().filter(article -> article.getTags().contains("Java")).findFirst();
+	}
 
-    public List<Article> getAllJavaArticles_loop() {
-        List<Article> result = new ArrayList<>();
+	public Optional<Article> getFirstJavaArticle_stream_parallel() {
+		return articles.stream().parallel().filter(article -> article.getTags().contains("Java")).findFirst();
+	}
 
-        for (Article article : articles) {
-            if (article.getTags().contains("Java")) {
-                result.add(article);
-            }
-        }
+	public List<Article> getAllJavaArticles_loop() {
+		List<Article> result = new ArrayList<>();
 
-        return result;
-    }
+		for (Article article : articles) {
+			if (article.getTags().contains("Java")) {
+				result.add(article);
+			}
+		}
 
-    public List<Article> getAllJavaArticles_stream() {
-        return articles.stream()
-                .filter(article -> article.getTags().contains("Java"))
-                .collect(Collectors.toList());
-    }
+		return result;
+	}
 
-    public Map<String, List<Article>> groupByAuthor_loop() {
-        Map<String, List<Article>> result = new HashMap<>();
+	public List<Article> getAllJavaArticles_stream() {
+		return articles.stream().filter(article -> article.getTags().contains("Java")).collect(Collectors.toList());
+	}
 
-        for (Article article : articles) {
-            if (result.containsKey(article.getAuthor())) {
-                result.get(article.getAuthor()).add(article);
-            } else {
-                ArrayList<Article> articles = new ArrayList<>();
-                articles.add(article);
-                result.put(article.getAuthor(), articles);
-            }
-        }
+	public List<Article> getAllJavaArticles_stream_parallel() {
+		return articles.stream().parallel().filter(article -> article.getTags().contains("Java"))
+				.collect(Collectors.toList());
+	}
 
-        return result;
-    }
+	public Map<String, List<Article>> groupByAuthor_loop() {
+		Map<String, List<Article>> result = new HashMap<>();
 
-    public Map<String, List<Article>> groupByAuthor_stream() {
-        return articles.stream()
-                .collect(Collectors.groupingBy(Article::getAuthor));
-    }
+		for (Article article : articles) {
+			if (result.containsKey(article.getAuthor())) {
+				result.get(article.getAuthor()).add(article);
+			} else {
+				ArrayList<Article> articles = new ArrayList<>();
+				articles.add(article);
+				result.put(article.getAuthor(), articles);
+			}
+		}
 
-    public Set<String> getDistinctTags_loop() {
-        Set<String> result = new HashSet<>();
+		return result;
+	}
 
-        for (Article article : articles) {
-            result.addAll(article.getTags());
-        }
+	public Map<String, List<Article>> groupByAuthor_stream() {
+		return articles.stream().collect(Collectors.groupingBy(Article::getAuthor));
+	}
 
-        return result;
-    }
+	public Map<String, List<Article>> groupByAuthor_stream_parallel() {
+		return articles.stream().parallel().collect(Collectors.groupingBy(Article::getAuthor));
+	}
 
-    public Set<String> getDistinctTags_stream() {
-        return articles.stream()
-                .flatMap(article -> article.getTags().stream())
-                .collect(Collectors.toSet());
-    }
+	public Set<String> getDistinctTags_loop() {
+		Set<String> result = new HashSet<>();
+
+		for (Article article : articles) {
+			result.addAll(article.getTags());
+		}
+
+		return result;
+	}
+
+	public Set<String> getDistinctTags_stream() {
+		return articles.stream().flatMap(article -> article.getTags().stream()).collect(Collectors.toSet());
+	}
+
+	public Set<String> getDistinctTags_stream_parallel() {
+		return articles.stream().parallel().flatMap(article -> article.getTags().stream().parallel()).collect(Collectors.toSet());
+	}
 }

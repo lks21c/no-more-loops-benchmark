@@ -37,6 +37,11 @@ public class ArticleOpsBenchmark {
     }
 
     @Benchmark
+    public Optional<Article> getFirstJavaArticle_stream_parallel_benchmark(BenchmarkState state) {
+        return state.articlesOps.getFirstJavaArticle_stream_parallel();
+    }
+
+    @Benchmark
     public List<Article> getAllJavaArticles_loop_benchmark(BenchmarkState state) {
         return state.articlesOps.getAllJavaArticles_loop();
     }
@@ -44,6 +49,11 @@ public class ArticleOpsBenchmark {
     @Benchmark
     public List<Article> getAllJavaArticles_stream_benchmark(BenchmarkState state) {
         return state.articlesOps.getAllJavaArticles_stream();
+    }
+
+    @Benchmark
+    public List<Article> getAllJavaArticles_stream_parallel_benchmark(BenchmarkState state) {
+        return state.articlesOps.getAllJavaArticles_stream_parallel();
     }
 
     @Benchmark
@@ -57,6 +67,11 @@ public class ArticleOpsBenchmark {
     }
 
     @Benchmark
+    public Map<String, List<Article>> groupByAuthor_stream_parallel_benchmark(BenchmarkState state) {
+        return state.articlesOps.groupByAuthor_stream_parallel();
+    }
+
+    @Benchmark
     public Set<String> getDistinctTags_loop_benchmark(BenchmarkState state) {
         return state.articlesOps.getDistinctTags_loop();
     }
@@ -64,5 +79,10 @@ public class ArticleOpsBenchmark {
     @Benchmark
     public Set<String> getDistinctTags_stream_benchmark(BenchmarkState state) {
         return state.articlesOps.getDistinctTags_stream();
+    }
+
+    @Benchmark
+    public Set<String> getDistinctTags_stream_parallel_benchmark(BenchmarkState state) {
+        return state.articlesOps.getDistinctTags_stream_parallel();
     }
 }
